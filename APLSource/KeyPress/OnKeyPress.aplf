@@ -1,4 +1,4 @@
- r←OnKeyPress(ref event input char key shiftState);kl;H;None;ShiftS;info
+ r←OnKeyPress(ref event input char key shiftState);kl;H;None;ShiftS;info;buff
  r←0
  None←{''≡⍵:'[none]' ⋄ ⍵}
  H←⎕D,6⍴⎕A                          ⍝ Hex digits
@@ -27,7 +27,7 @@
  n.Decimal.Text←H[1+((4)⍴16)⊤char]
  n.KeyNumber.Text←⍕key
  n.ShiftState.Text←None⍕shiftState
- n.ShiftStateCaption.Text←ShiftS←None ¯1↓∊((2 2 2⊤shiftState)/'Alt' 'Ctrl' 'Shift'),¨'+'
+ n.ShiftStateCaption.Text←ShiftS←None buff←¯1↓∊((2 2 2⊤shiftState)/'Alt' 'Ctrl' 'Shift'),¨'+'
 
- ⎕←(10↑(⍕char),' ',(⍕shiftState)),'= ',ShiftS,'+',None input
+ ⎕←(10↑(⍕char),' ',(⍕shiftState)),'= ',({''≡⍵:'' ⋄ ⍵,'+'}buff),None input
 ⍝Done
