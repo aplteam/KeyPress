@@ -5,7 +5,7 @@
  cl←2 ⎕NQ #'GetCommandLineArgs'
  quote←{'"',⍵,'"'}
  cmd←quote⊃cl
- cmd,←' 'quote workspace
+ cmd,←' ',quote workspace
  cmd,←{0=≡⍵:⍵ ⋄ ' ',⍵}parms
  'wsh'⎕WC'OLEClient' 'WScript.Shell'
  r←wsh.Run⊂cmd

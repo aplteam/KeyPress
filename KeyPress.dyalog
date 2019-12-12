@@ -14,7 +14,7 @@
 ⍝ 2018 05 01 Adam: add SVN tag
 ⍝ 2019 01 16 Adam: help
 ⍝ 2019 02 14 Andy: replace http with https
-⍝ 2019 12 11 Kai: Make it a stand-alone EXE in order to avoid any conflicts whith Accelerators defined anywahere in ⎕SE
+⍝ 2019 12 11 Kai: Run this in a separate instance of Dyalog APL in order to avoid any conflicts whith Accelerators defined anywhere in ⎕SE
 
     BCol_Form←¯16   ⍝ = Button Face      188 188 188      ⍝ background of the form
     BCol_Label←¯16  ⍝ = Button Face      166 166 166     ⍝ labels for the various fields
@@ -46,11 +46,11 @@
           r,←⊂'Keypress event information includes the key number for a particular key. This is needed when:'
           r,←⊂' ∘  setting up an Accelerator property for a GUI object.'
           r,←⊂' ∘  editing the keyboard translate .DIN files for the IME to enable keyboard layout customisation.'      
-		  r,←⊂' ∘  performing some action in the keypress event callback for a particular key.'
-		  r,←⊂''
-		  r,←⊂'Note that this runs as a stand-alone EXE in order to avoid that Accelerator keys defined in ⎕SE'
-		  r,←⊂'would not be reported as they take precedence.'
-		  r,←⊂''
+          r,←⊂' ∘  performing some action in the keypress event callback for a particular key.'
+          r,←⊂''
+          r,←⊂'Note that this runs as a stand-alone EXE in order to avoid that Accelerator keys defined in ⎕SE'
+          r,←⊂'would not be reported as they take precedence.'
+          r,←⊂''
           r,←⊂'For more information on the event message vector, see the Dyalog for Microsoft Windows Object Reference Guide:'
           h←'    ]Open https://help.dyalog.com/'
           h,←1↓∊2↑'.'(=⊂⊢)'.',2⊃⎕SE.SALTUtils.APLV
@@ -61,28 +61,28 @@
       :EndIf
     ∇
 
-    ∇ {R}←Run dummy;path;wsh
+    ∇ {R}←Run dummy;path
       R←⍬
       path←(⊃⎕NPARTS ##.SourceFile),'KeyPress.dws'
       :If ⎕NEXISTS path
-          'wsh'⎕WC'OLEClient' 'WScript.Shell'
-          {}wsh.Run ⊂path
+         'session_file=CertainlyUnknown maxws=8MB' StartAPL path
       :Else
           ⎕←'Could not find KeyPress.dws in ',⊃⎕NPARTS path
       :EndIf
     ∇
-	
-	∇ {r}←{parms}StartAPL workspace;cl;quote;cmd;wsh
-	⍝ ⍵ ←→ workspace
-	⍝ ⍺ ←→ additional stuff for the command line like maxws=nn etc.
-	parms←{0<⎕NC ⍵:≡⍵ ⋄ ''}'parms'
-	cl←2 ⎕NQ #'GetCommandLineArgs'
-	quote←{'"',⍵,'"'}
-	cmd←quote⊃cl
-	cmd,←' 'quote workspace
-	cmd,←{0=≡⍵:⍵ ⋄ ' ',⍵}parms
-	'wsh'⎕WC'OLEClient' 'WScript.Shell'
-	wsh.Run⊂cmd
+    
+    ∇ {r}←{parms}StartAPL workspace;cl;quote;cmd;wsh
+    ⍝ ⍵ ←→ workspace
+    ⍝ ⍺ ←→ additional stuff for the command line like maxws=nn etc.
+    r←⍬
+    parms←{0<⎕NC ⍵:⍎⍵ ⋄ ''}'parms'
+    cl←2 ⎕NQ #'GetCommandLineArgs'
+    quote←{'"',⍵,'"'}
+    cmd←quote⊃cl
+    cmd,←' ',quote workspace
+    cmd,←{0=≡⍵:⍵ ⋄ ' ',⍵}parms
+    'wsh'⎕WC'OLEClient' 'WScript.Shell'
+    wsh.Run⊂cmd
     ⍝Done
    ∇
 
