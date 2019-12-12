@@ -1,0 +1,38 @@
+ r←OnKeyPress(ref event input char key shiftState);kl;H;None;ShiftS
+ r←0
+ None←{''≡⍵:'[none]' ⋄ ⍵}
+ H←⎕D,6⍴⎕A                          ⍝ Hex digits
+ :If ('EP'≡input)∧shiftState=0
+     :If 'EP' 0≡ref.∆LastKey        ⍝ <Escape> ?!
+         ref.Close
+         :Return
+     :Else
+         ref.∆LastKey←'EP' 0
+     :EndIf
+ :ElseIf (115≡key)∧shiftState=4     ⍝ <Alt+F4> ?!
+     :If 'ALT+F4' 4≡ref.∆LastKey
+         ref.Close
+         :Return
+     :Else
+         ref.∆LastKey←'ALT+F4' 4
+     :EndIf
+ :Else
+     ref.∆LastKey←''
+ :EndIf
+
+ 'K1'ref.⎕WS'Text'(' n/a')
+ 'K2'ref.⎕WS'Text'(' ',event)
+ 'K3'ref.⎕WS'Text'(' ',None input)
+ 'K4'ref.⎕WS'Text'(' ',⍕char)
+ 'K7'ref.⎕WS'Text'(' ',H[1+((4)⍴16)⊤char])
+ 'K5'ref.⎕WS'Text'(' ',⍕key)
+ 'K6'ref.⎕WS'Text'(' ',None⍕shiftState)
+ 'KS'ref.⎕WS'Text'(' ',ShiftS←None ¯1↓∊((2 2 2⊤shiftState)/'Alt' 'Ctrl' 'Shift'),¨'+')
+
+ ⍝ The following information was prior to version 2.0 printed to the session.
+ ⍝ As a stand-alone EXE that's not possible any more.
+ ⍝ What was the purpose of that anyway?
+ ∆INFO←'Input: ',None input
+ ∆INFO,←', Char: ',⍕char
+ ∆INFO,←', Key: ',⍕key
+ ∆INFO,←', Shift: ',(⍕shiftState),'=',ShiftS

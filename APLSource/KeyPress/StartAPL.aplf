@@ -1,0 +1,12 @@
+ {r}←{parms}StartAPL workspace;cl;quote;cmd;wsh
+⍝ ⍵ ←→ workspace
+⍝ ⍺ ←→ additional stuff for the command line like maxws=nn etc.
+ parms←{0<⎕NC ⍵:≡⍵ ⋄ ''}'parms'
+ cl←2 ⎕NQ #'GetCommandLineArgs'
+ quote←{'"',⍵,'"'}
+ cmd←quote⊃cl
+ cmd,←' 'quote workspace
+ cmd,←{0=≡⍵:⍵ ⋄ ' ',⍵}parms
+ 'wsh'⎕WC'OLEClient' 'WScript.Shell'
+ r←wsh.Run⊂cmd
+⍝Done

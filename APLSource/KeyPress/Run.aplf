@@ -1,0 +1,94 @@
+ {R}←Run debugFlag;verticalPosn;HP;VS;∆;allChildrenButLast;sz;maxLength;posn;buff
+⍝ Shows a GUI were the user can press any key (even) <escape> in order to see
+⍝ what's carried by the associated "KeyPress" event.
+⍝ See `Version` and `History` for details.
+
+ ⎕IO←1 ⋄ ⎕ML←1 ⋄ ⎕WX←3
+
+ {}{2704⌶1}⍣debugFlag⊣⍬  ⍝ Allow saving a CONTINUE WS
+
+ R←⍬
+
+ n←⎕NS'' ⍝ Used to collect references and global(s)
+
+ ∆←''
+ ∆,←⊂'Caption' 'KeyPress Event'
+ ∆,←⊂'Coord' 'Pixel'
+ ∆,←⊂'MinButton' 0
+ ∆,←⊂'MaxButton' 0
+ ∆,←⊂'Size'(260 470)
+ :If 1
+     ∆,←⊂'Sizeable' 0
+ :Else
+     ∆,←⊂'Sizeable' 1 ⍝ Development onle (when GUI really changes)
+ :EndIf
+ n.TheForm←⎕NEW'Form'∆
+ n.∆LastKey←''   ⍝ Needed to recognize whether <escape> or <Alt+F4> was pressed twices in succession
+ n.APLfont←⎕NEW'Font'(('PName' 'APL385 Unicode')('Size' 22))
+
+ n.∆fontSize←2 ⎕NQ n.APLfont'GetTextSize' 'W'  ⍝ was "C"
+
+ verticalPosn←⌊n.∆fontSize[1]×¯1.5+2.5×⍳8
+
+⍝ ----- Create column 1: left-hand labels -----------------------------
+
+ HP←n.∆fontSize[2]              ⍝ Horizontal position
+ VS←n.∆fontSize[1]×2            ⍝ Vertical size
+
+ ∆←('Size'(VS ⍬))('Attach'(4⍴'Top' 'Left'))
+ 'L1'n.TheForm.⎕WC'Label' ' [1] Object:'('Posn'(1⊃verticalPosn)HP),∆
+ 'L2'n.TheForm.⎕WC'Label' ' [2] Event:'('Posn'(2⊃verticalPosn)HP),∆
+ 'L3'n.TheForm.⎕WC'Label' ' [3] Input Code:'('Posn'(3⊃verticalPosn)HP),∆
+ 'L4'n.TheForm.⎕WC'Label' ' [4] Char Code:'('Posn'(4⊃verticalPosn)HP),∆
+ 'L5'n.TheForm.⎕WC'Label' ' [5] Key Number:'('Posn'(5⊃verticalPosn)HP),∆
+ 'L6'n.TheForm.⎕WC'Label' ' [6] Shift State:'('Posn'(6⊃verticalPosn)HP),∆
+
+ ∆←'To exit click the close box or press either <Escape> or <Alt+F4> twice'
+ 'LC'n.TheForm.⎕WC'Label'∆('Posn'(10+7⊃verticalPosn)(n.∆fontSize[2]+5))('Size'VS ⍬)('FCol' 0 0 255)
+
+ allChildrenButLast←¯1↓'Label'⎕WN n.TheForm
+ sz←2⊃¨¨allChildrenButLast ⎕WG¨⊂'Posn' 'Size'
+ allChildrenButLast ⎕WS¨⊂'Size'⍬(⌈/2⊃¨sz)
+ sz←⌈/+/¨sz                             ⍝ Largest Posn+Size
+
+⍝ ----- Create column 2: APL "edit" boxes -----------------------------
+
+ HP←sz                                  ⍝ Horiz positions (column 2)
+ maxLength←n.∆fontSize[2]×2+≢¨' KeyPress' ' Ctrl+Shift+Alt'
+ ∆←('Size'(VS,1⊃maxLength))('Font'n.APLfont)('ReadOnly' 1)
+ n.Object←n.TheForm.⎕NEW'Edit'((⊂'Posn'((1⊃verticalPosn)HP)),∆)
+ n.Event←n.TheForm.⎕NEW'Edit'((⊂'Posn'((2⊃verticalPosn)HP)),∆)
+ n.InputCode←n.TheForm.⎕NEW'Edit'((⊂'Posn'((3⊃verticalPosn)HP)),∆)
+ n.CharCode←n.TheForm.⎕NEW'Edit'((⊂'Posn'((4⊃verticalPosn)HP)),∆)
+ n.KeyNumber←n.TheForm.⎕NEW'Edit'((⊂'Posn'((5⊃verticalPosn)HP)),∆)
+ n.ShiftState←n.TheForm.⎕NEW'Edit'((⊂'Posn'((6⊃verticalPosn)HP)),∆)
+
+⍝ ----- Create more ASCII stuff ---------------------------------------
+
+ posn←(4⊃verticalPosn),HP+(1⊃maxLength)+n.∆fontSize[2]×0.5
+ ∆←⊂('Size'(VS ⍬))
+ 'D1'n.TheForm.⎕WC'Label' ' decimal'('Posn'posn),∆
+ buff←'D1'n.TheForm.⎕WG'Size'
+ posn[2]+←buff[2]
+ 'D3'n.TheForm.⎕WC'Label'('Posn'posn),('Caption' ' ≡')('Font' 'APL')('Size'VS(n.∆fontSize[2]×2.5))
+ buff←'D3'n.TheForm.⎕WG'Size'
+ posn[2]+←buff[2]
+ n.Decimal←n.TheForm.⎕NEW'Edit'(('Posn'posn)('Size'(VS,0.5×2⊃maxLength)),∆)
+ posn[2]←5+2⊃+⌿↑n.Decimal.(Posn Size)
+ 'D2'n.TheForm.⎕WC'Label' ' hex'('Posn'posn),∆
+
+⍝ ----- Create shift state buttons ------------------------------------
+
+ posn←(6⊃verticalPosn),HP+(1⊃maxLength)
+ 'B0'n.TheForm.⎕WC'Label'('Posn'posn),('Caption' ' ≡')('Font' 'APL')('Size'VS(n.∆fontSize[2]×2.5))
+ buff←'B0'n.TheForm.⎕WG'Size'
+ posn[2]+←buff[2]
+ n.ShiftStateCaption←n.TheForm.⎕NEW'Edit'(('Posn'posn)('Size'(VS,2⊃maxLength))('Font'n.APLfont)('ReadOnly' 1))
+
+ n.TheForm.onKeyPress←'OnKeyPress'
+⍝ ⎕NQ n.TheForm'GotFocus'
+ ⎕DQ'.'
+ :If ~debugFlag
+     ⎕OFF
+ :EndIf
+⍝Done

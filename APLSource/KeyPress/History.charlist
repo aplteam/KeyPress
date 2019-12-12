@@ -1,0 +1,13 @@
+⍝ 2019 12 11 Kai:       Runs as a stand-alone exe now in order to avoid the problem that accelerator 
+                        used in ⎕SE keys were not reported.
+⍝ 2017 09 04 Kai:       Pressing <escape> or <Alt+F4> twice closes the dialog box; no threads needed by 
+                        moving logic to a callback; honour scaling
+⍝ 2017 03 02 MBaas:     Initial code for KP as UCMD
+⍝ 2017 03 09 MBaas:     Runs in classic, using 4 digits for hex-codes in non-classic, easy BCol-Fiddling
+⍝ 2017 03 10 MBaas:     Adjustments to positioning, colour and fonts
+⍝ 2017 03 15 Adam:      Shorten printed labels, add spacing, adjust fonts, spin off thread if 
+                        called from session, help text fixes
+⍝ 2017 03 16 Adam:      Fix help level ?? → ?, remove outputted newline, fix RIU issue
+⍝ 2017 03 22 Adam:      Made colours consistent                             
+⍝ 1995 08 15            Simplify and improve handling of System and APL fonts
+⍝ 1995 04 03 Rex Swain: Independent Consultant, Tel (+1) 203-868-0131
