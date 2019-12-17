@@ -29,5 +29,5 @@
  n.ShiftState.Text←None⍕shiftState
  n.ShiftStateCaption.Text←ShiftS←None buff←¯1↓∊((2 2 2⊤shiftState)/'Alt' 'Ctrl' 'Shift'),¨'+'
 
- ⎕←(10↑(⍕char),' ',(⍕shiftState)),'= ',({''≡⍵:'' ⋄ ⍵,'+'}buff),None input
+ ⎕←(10↑(⍕key),' ',(⍕shiftState)),'= ',({''≡⍵:'' ⋄ ⍵,'+'}buff),None input
 ⍝Done
