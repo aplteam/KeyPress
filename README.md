@@ -1,9 +1,9 @@
 # The `]KeyPress` user command
 
-This user command fires up a stand-alone EXE created with Dyalog 17.1 Unicode 64 bit. 
+`]KeyPress` shows a small GUI that reports the details of any key pressed on the keyboard.
 
-It shows a small GUI that reflects any key you press on the keyboard.
+![](keypress_screenshot.png)
 
-For quitting the application you need to hit the <escape> key twice in succession.
+This user command fires up a separate (additional) instance of Dyalog APL in order to execute the real code. The reason for this is that executing the code in `⎕SE` means that any accelerator key used on any of the menu items in the session would result in the "KeyPress" event not being send, therefore the GUI is not able to report those.
 
-The reason why this became in 2019-12 a stand-alone application rather than executing the code in `⎕SE` is that any accelarator key used on any of the menu items in the session would take precedence over the user command, meaning that `OnKeyPress` cannot report such keys because the event would not be fired. For a stand-alone EXE this is of course not a problem.
+For quitting the application, you need to hit the <escape> key twice in succession.
