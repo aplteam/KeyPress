@@ -4,7 +4,7 @@
  H←⎕D,6⍴⎕A                          ⍝ Hex digits
  :If ('EP'≡input)∧shiftState=0
      :If 'EP' 0≡n.∆LastKey          ⍝ <Escape> ?!
-         ref.Close
+         :Trap 0 ⋄ ref.Close ⋄ :EndTrap
          :Return
      :Else
          n.∆LastKey←'EP' 0
@@ -28,6 +28,7 @@
  n.KeyNumber.Text←⍕key
  n.ShiftState.Text←None⍕shiftState
  n.ShiftStateCaption.Text←ShiftS←None buff←¯1↓∊((2 2 2⊤shiftState)/'Alt' 'Ctrl' 'Shift'),¨'+'
+ n.Copy.Active←1
 
- ⎕←(10↑(⍕key),' ',(⍕shiftState)),'= ',({''≡⍵:'' ⋄ ⍵,'+'}buff),None input
+⍝ ⎕←(10↑(⍕key),' ',(⍕shiftState)),'= ',({''≡⍵:'' ⋄ ⍵,'+'}buff),None input   ⍝ Not anymore: stand-alone EXE now
 ⍝Done

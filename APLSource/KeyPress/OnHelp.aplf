@@ -1,0 +1,9 @@
+ OnHelp←{
+     msg←''
+     msg,←⊂'Dyalog APL KeyPress utility'
+     msg,←⊂''
+     msg,←⊂'To quit select "Quit" from the "File" menu or press <escape> TWICE in succession!'
+     mm←⎕NEW'MsgBox'(('Caption' 'KeyPress Help')('Style' 'Info')('Text'msg))
+     _←⎕DQ mm
+     0
+ }

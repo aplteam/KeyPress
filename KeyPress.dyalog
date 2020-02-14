@@ -1,20 +1,7 @@
-﻿:Namespace KeyPress ⍝ V2.0
-⍝ 1995 04 03 RexSwain: Independent Consultant, Tel (+1) 203-868-0131
-⍝ 1995 08 15 RexSwain: Simplify and improve handling of System and APL fonts
-⍝ 2017 03 02 MBaas: Initial code for KP as UCMD
-⍝ 2017 03 09 MBaas: Runs in classic, using 4 digits for hex-codes in non-classic, easy BCol-Fiddling
-⍝ 2017 03 10 MBaas: Adjustments to positioning, colour and fonts
-⍝ 2017 03 15 Adam: Shorten printed labels, add spacing, adjust fonts, spin off thread if called from session, help text fixes
-⍝ 2017 03 16 Adam: Fix help level ?? → ?, remove outputted newline, fix RIU issue
-⍝ 2017 03 22 Adam: Made colours consistent
-⍝ 2017 09 04 Kai: Pressing <escape> or <Alt+F4> twice closes the dialog box; no threads needed by moving logic to a callback; honour scaling
-⍝ 2017 10 02 MBaas: more help; honouring scaling by using ScaledPixel
-⍝ 2018 04 18 Adam: ]??cmd → ]cmd -??
-⍝ 2018 04 19 Adam: help text updates
-⍝ 2018 05 01 Adam: add SVN tag
-⍝ 2019 01 16 Adam: help
-⍝ 2019 02 14 Andy: replace http with https
-⍝ 2019 12 11 Kai: Run this in a separate instance of Dyalog APL in order to avoid any conflicts whith Accelerators defined anywhere in ⎕SE
+﻿:Namespace KeyPress ⍝v2.0
+⍝ Kai's version: started in 2019-12 because Dyalog's version interferred with ⎕SE and therefore was not reliable.
+⍝ It's now a stand-alone EXE which does not interfere with anything.
+⍝ 2020 02 13 ⋄ kai: First stand-alone version
 
     BCol_Form←¯16   ⍝ = Button Face      188 188 188      ⍝ background of the form
     BCol_Label←¯16  ⍝ = Button Face      166 166 166     ⍝ labels for the various fields
@@ -63,27 +50,12 @@
 
     ∇ {R}←Run dummy;path
       R←⍬
-      path←(⊃⎕NPARTS ##.SourceFile),'KeyPress.dws'
+      path←(2 ⎕nq #'GetEnvironment' 'USERPROFILE'),'\Documents\MyUCMDs\KeyPress\KeyPress.exe'
       :If ⎕NEXISTS path
-         'session_file=CertainlyUnknown maxws=8MB' StartAPL path
+         ⎕SH path
       :Else
-          ⎕←'Could not find KeyPress.dws in ',⊃⎕NPARTS path
+          11 ⎕SIGNAL⍨'Could not find ',path
       :EndIf
     ∇
-    
-    ∇ {r}←{parms}StartAPL workspace;cl;quote;cmd;wsh
-    ⍝ ⍵ ←→ workspace
-    ⍝ ⍺ ←→ additional stuff for the command line like maxws=nn etc.
-    r←⍬
-    parms←{0<⎕NC ⍵:⍎⍵ ⋄ ''}'parms'
-    cl←2 ⎕NQ #'GetCommandLineArgs'
-    quote←{'"',⍵,'"'}
-    cmd←quote⊃cl
-    cmd,←' ',quote workspace
-    cmd,←{0=≡⍵:⍵ ⋄ ' ',⍵}parms
-    'wsh'⎕WC'OLEClient' 'WScript.Shell'
-    wsh.Run⊂cmd
-    ⍝Done
-   ∇
 
-:EndNamespace ⍝ KeyPress
+:EndNamespace

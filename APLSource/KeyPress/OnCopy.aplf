@@ -1,0 +1,6 @@
+ OnCopy←{
+     cl←⎕NEW⊂'Clipboard'
+     cl.Text←'''Accelerator'' (',(⍕n.(KeyNumber ShiftState).Value),')'
+     _←⎕NQ n.TheForm'GotFocus'
+     0
+ }

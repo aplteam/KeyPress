@@ -1,0 +1,13 @@
+ OnAbout←{
+     msg←''
+     msg,←⊂'Dyalog APL KeyPress utility'
+     msg,←⊂''
+     msg,←⊂'The project lives on https://https://github.com/aplteam/KeyPress'
+     msg,←⊂''
+     msg,←⊂'Written by Rex Swain, members of the Dyalog Team and Kai Jaeger'
+     msg,←⊂''
+     msg,←⊂'Version ',(2⊃Version),' from ',(3⊃Version)
+     mm←⎕NEW'MsgBox'(('Caption' 'About KeyPress')('Style' 'Info')('Text'msg))
+     _←⎕DQ mm
+     0
+ }

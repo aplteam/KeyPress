@@ -11,6 +11,16 @@
  ∆,←('Caption' 'KeyPress Event')('Coord' 'Pixel')('MinButton' 0)('MaxButton' 0)('Size'(247 419))
  ∆,←⊂'Sizeable' 0               ⍝ Set this to 1 only when the Form needs adjustments
  n.TheForm←⎕NEW'Form'∆
+ n.∆Menu←⎕NS''
+ n.∆Menu.Menubar←n.TheForm.⎕NEW⊂'Menubar'
+ n.∆Menu.FileMenu←n.∆Menu.Menubar.⎕NEW'Menu'(⊂('Caption' 'File'))
+ n.∆Menu.Quit←n.∆Menu.FileMenu.⎕NEW'MenuItem'(⊂('Caption' 'Quit'))
+ n.∆Menu.Quit.onSelect←1
+ n.∆Menu.HelpMenu←n.∆Menu.Menubar.⎕NEW'Menu'(⊂('Caption' 'Help'))
+ n.∆Menu.Help←n.∆Menu.HelpMenu.⎕NEW'MenuItem'(⊂('Caption' 'Help'))
+ n.∆Menu.Help.onSelect←'OnHelp'
+ n.∆Menu.About←n.∆Menu.HelpMenu.⎕NEW'MenuItem'(⊂('Caption' 'About'))
+ n.∆Menu.About.onSelect←'OnAbout'
  n.∆LastKey←''                  ⍝ Needed to recognize whether <escape> or <Alt+F4> was pressed twice in succession
  n.APLfont←⎕NEW'Font'(('PName' 'APL385 Unicode')('Size' 22))
  n.∆fontSize←2 ⎕NQ n.APLfont'GetTextSize' 'W'  ⍝ was "C"
@@ -25,7 +35,7 @@
  'L4'n.TheForm.⎕WC'Label' ' [4] Char Code:'('Posn'(4⊃verticalPosn)HP),∆
  'L5'n.TheForm.⎕WC'Label' ' [5] Key Number:'('Posn'(5⊃verticalPosn)HP),∆
  'L6'n.TheForm.⎕WC'Label' ' [6] Shift State:'('Posn'(6⊃verticalPosn)HP),∆
- ∆←'To exit click the close box or press either <Escape> or <Alt+F4> twice'
+ ∆←'To exit click the close box or press either <Escape> or <Alt+F4> twice in succession'
  'LC'n.TheForm.⎕WC'Label'∆('Posn'(10+7⊃verticalPosn)(n.∆fontSize[2]+5))('Size'VS ⍬)('FCol' 0 0 255)('Attach'(4⍴'Top' 'Left'))
  n.TheForm.Size←(10+⊃+⌿↑n.TheForm.LC.(Posn Size))800
  allChildrenButLast←¯1↓'Label'⎕WN n.TheForm
@@ -60,13 +70,18 @@
  posn[2]+←buff[2]
  n.ShiftStateCaption←n.TheForm.⎕NEW'Edit'(('Posn'posn)('Size'(VS,2⊃maxLength))('Font'n.APLfont)('ReadOnly' 1)('Attach'(4⍴'Top' 'Left')))
  buff←{(⎕WN ⍵)~'Font'⎕WN ⍵}n.TheForm
+ buff~←'Menubar'⎕WN n.TheForm
  buff←2⊃¨¨buff ⎕WG¨⊂'Posn' 'Size'
  buff←n.∆fontSize[2]+⌈/+/¨buff                  ⍝ Largest Posn+Size, plus right-hand pad
  corr←⌊{(1⊃⍵)×0.001×¯100+4⊃⍵}'.'⎕WG'DevCaps'    ⍝ Honour scaling
  n.TheForm.⎕WS('Size'⍬ buff)                    ⍝ Fix overall width
+ n.Copy←n.TheForm.⎕NEW'Button'(('Caption' '  Copy Accelerator to Clipboard  ')('Active' 0))
+ n.Copy.Posn←(n.Object.Posn[1]),(n.TheForm.Size[2]-n.Copy.Size[2]+VS)
+ n.Copy.onSelect←'OnCopy'
  n.TheForm.onKeyPress←'OnKeyPress'
  ⎕←'KeyPress info:'                             ⍝ Force the session to make an appearance
  ⎕NQ n.TheForm'GotFocus'                        ⍝ Force focus back to GUI
  ⎕DQ'.'
+ :Trap 6 ⋄ ⎕NQ n.TheForm'Close' ⋄ :EndTrap
  {}{⎕OFF}⍣(~debugFlag)⊣⍬
 ⍝Done

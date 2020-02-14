@@ -4,6 +4,6 @@
 
 ![](keypress_screenshot.png)
 
-This user command fires up a separate (additional) instance of Dyalog APL in order to execute the real code. The reason for this is that executing the code in `⎕SE` means that any accelerator key used on any of the menu items in the session would result in the "KeyPress" event not being send, therefore the GUI is not able to report those.
+This user command fires up a stand-alone EXE created with Dyalog. This is a necessary measure  in order to avoid any hot keys from `⎕SE` inteferring with the GUI: the hot keys take precedence!
 
-For quitting the application, you need to hit either the `<escape>` key or the `Alt+F4` key twice in succession.
+For quitting the application, you need to hit either the `<escape>` key or the `Alt+F4` key twice in succession .
